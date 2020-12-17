@@ -40,11 +40,11 @@ def run(config):
     replay_buffer = ReplayBuffer(config.buffer_size)
 
     # DDPG agent
-    agent = DDPGAgent(env.observation_space, env.action_space, replay_buffer)
+    # agent = DDPGAgent(env.observation_space, env.action_space, replay_buffer)
     # DQN agent
-    # agent = DQNAgent(env.observation_space, env.action_space, replay_buffer)
+    agent = DQNAgent(env.observation_space, env.action_space, replay_buffer)
     print(f"Loading the networks parameters - {config.saved_model} ")
-    agent.load_params(torch.load(config.saved_model))
+    # agent.load_params(torch.load(config.saved_model))
 
     episodes_count = 0
     for episode_i in range(config.num_episodes):
@@ -80,7 +80,9 @@ def run(config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Evaluate Mode')
     parser.add_argument('--env', default='PongNoFrameskip-v4', type=str)
-    parser.add_argument('--saved_model', default='./ddpg_models/run5/model.pt', type=str,
+    # parser.add_argument('--saved_model', default='./ddpg_models/run5/model.pt', type=str,
+    #                     help='Load the model you have saved before (for example: ./ddpg_models/run1/model.pt)')
+    parser.add_argument('--saved_model', default='./dqn_models/run1/model.pt', type=str,
                         help='Load the model you have saved before (for example: ./ddpg_models/run1/model.pt)')
     parser.add_argument('--seed', default=43, type=int)
     parser.add_argument('--buffer_size', default=5000, type=int)
