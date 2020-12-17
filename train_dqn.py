@@ -18,6 +18,9 @@ def train_model():
 
 
 def run(config):
+    '''
+    preparetion for saved directory
+    '''
     model_dir = Path('./dqn_models')
     if not model_dir.exists():
         curr_run = 'run1'
@@ -33,6 +36,10 @@ def run(config):
 
     os.makedirs(str(run_dir))
     os.makedirs(str(figures_dir))
+    
+    '''
+    set the seed
+    '''
     torch.manual_seed(config.seed)
     np.random.seed(config.seed)
 
@@ -41,6 +48,9 @@ def run(config):
     else:
         e_greedy_start = 1
 
+    '''
+    preparetion for env
+    '''
     assert "NoFrameskip" in config.env, "Require environment with no frameskip"
     env = gym.make(config.env)
     env.seed(config.seed)
@@ -56,6 +66,9 @@ def run(config):
 
     replay_buffer = ReplayBuffer(config.buffer_size)
 
+    '''
+    init dqn agent
+    '''
     agent = DQNAgent(
         env.observation_space,
         env.action_space,
@@ -73,8 +86,12 @@ def run(config):
     total_rewards = [0.0]
     mean_100ep_rewards = []
 
+    '''
+    begin to train
+    '''
     state = env.reset()
     for step_i in range(config.num_steps):
+        # select action by e_greedy
         fraction = min(1.0, float(step_i) / episode_time_steps)
         episode_threshold = e_greedy_start + fraction * (config.e_greedy_end - e_greedy_start)
         if random.random() > episode_threshold:
@@ -94,6 +111,7 @@ def run(config):
             state = env.reset()
             total_rewards.append(0.0)
 
+        # update agent
         if len(replay_buffer) > config.batch_size and step_i > config.learning_start:
             agent.update()
         if step_i > config.learning_start and step_i % config.target_update_freq == 0:
@@ -106,11 +124,11 @@ def run(config):
 
         if done and num_episode % config.print_freq == 0:
             mean_100ep_reward = round(np.mean(total_rewards[-101:-1]), 1)
-            print("********************************************************")
+            print("========================================================")
             print("steps: {}".format(step_i))
             print("episodes: {}".format(num_episode))
             print("mean 100 episode reward: {}".format(mean_100ep_reward))
-            print("********************************************************")
+            print("========================================================")
             np.savetxt(str(run_dir) + '/total_rewards.csv', total_rewards, delimiter=',', fmt='%1.3f')
             mean_100ep_rewards.append(mean_100ep_reward)
 
@@ -119,9 +137,11 @@ def run(config):
             # agent.save(str(run_dir / 'incremental' / ('model_ep%i.pt' % num_episode)))
             agent.save(str(run_dir / 'model.pt'))
 
+    # save the model
     agent.save(str(run_dir / 'model.pt'))
     env.close()
 
+    # draw graph
     index = list(range(len(total_rewards)))
     plt.plot(index, total_rewards)
     plt.ylabel('Total Rewards')
@@ -138,6 +158,9 @@ def run(config):
 
 
 if __name__ == '__main__':
+    '''
+    parse the argument
+    '''
     parser = argparse.ArgumentParser(description='Train Mode')
     parser.add_argument('--env', default='PongNoFrameskip-v4', type=str)
     parser.add_argument('--saved_model', default=None, type=str,
@@ -158,4 +181,7 @@ if __name__ == '__main__':
 
     config = parser.parse_args()
 
+    '''
+    train the dqn model
+    '''
     train_model()

@@ -9,7 +9,7 @@ class ReplayBuffer:
     def __init__(self, size):
         """
         Initialise a buffer of a given size for storing transitions
-        :param size: the maximum number of transitions that can be stored
+        @param {size} the maximum number of transitions that can be stored
         """
         self._storage = []
         self._maxsize = size
@@ -21,11 +21,11 @@ class ReplayBuffer:
     def add(self, state, action, reward, next_state, done):
         """
         Add a transition to the buffer. Old transitions will be overwritten if the buffer is full.
-        :param state: the agent's initial state
-        :param action: the action taken by the agent
-        :param reward: the reward the agent received
-        :param next_state: the subsequent state
-        :param done: whether the episode terminated
+        @param {state} the agent's initial state
+        @param {action} the action taken by the agent
+        @param {reward} the reward the agent received
+        @param {next_state} the subsequent state
+        @param {done} whether the episode terminated
         """
         data = (state, action, reward, next_state, done)
 
@@ -36,6 +36,11 @@ class ReplayBuffer:
         self._next_idx = (self._next_idx + 1) % self._maxsize
 
     def _encode_sample(self, indices):
+        """
+        Encode sample by indices
+        @param {indices} indices of sample to encode
+        @return a mini-batch of sampled transitions
+        """
         states, actions, rewards, next_states, dones = [], [], [], [], []
         for i in indices:
             data = self._storage[i]
@@ -50,8 +55,8 @@ class ReplayBuffer:
     def sample(self, batch_size):
         """
         Randomly sample a batch of transitions from the buffer.
-        :param batch_size: the number of transitions to sample
-        :return: a mini-batch of sampled transitions
+        @param {batch_size} the number of transitions to sample
+        @return a mini-batch of sampled transitions
         """
         indices = np.random.randint(0, len(self._storage) - 1, size=batch_size)
         return self._encode_sample(indices)

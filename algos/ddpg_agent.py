@@ -7,7 +7,8 @@ from utils.misc import soft_update, hard_update
 
 
 class DDPGAgent:
-    def __init__(self, observation_space,
+    def __init__(self, 
+                 observation_space,
                  action_space,
                  replay_buffer,
                  hidden_sizes=256,

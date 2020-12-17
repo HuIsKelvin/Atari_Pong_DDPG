@@ -9,6 +9,7 @@ import torch
 from utils.memory import ReplayBuffer
 from utils.env_wrappers import *
 from algos.ddpg_agent import DDPGAgent
+from algos.dqn_agent import DQNAgent
 
 
 def evaluate_model():
@@ -38,7 +39,10 @@ def run(config):
 
     replay_buffer = ReplayBuffer(config.buffer_size)
 
+    # DDPG agent
     agent = DDPGAgent(env.observation_space, env.action_space, replay_buffer)
+    # DQN agent
+    # agent = DQNAgent(env.observation_space, env.action_space, replay_buffer)
     print(f"Loading the networks parameters - {config.saved_model} ")
     agent.load_params(torch.load(config.saved_model))
 

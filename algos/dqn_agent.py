@@ -2,7 +2,8 @@ from gym import spaces
 import numpy as np
 
 from utils.dqn_neurips_network import DQN
-from dqn.replay_buffer import ReplayBuffer
+# from dqn.replay_buffer import ReplayBuffer
+from utils.memory import ReplayBuffer
 import torch
 import torch.nn.functional as F
 
@@ -18,12 +19,12 @@ class DQNAgent:
                  device=torch.device("cpu")):
         """
         Initialise the DQN algorithm using the Adam optimiser
-        :param action_space: the action space of the environment
-        :param observation_space: the state space of the environment
-        :param replay_buffer: storage for experience replay
-        :param lr: the learning rate for Adam
-        :param batch_size: the batch size
-        :param gamma: the discount factor
+        @param {action_space} the action space of the environment
+        @param {observation_space} the state space of the environment
+        @param {replay_buffer} storage for experience replay
+        @param {lr} the learning rate for Adam
+        @param {batch_size} the batch size
+        @param {gamma} the discount factor
         """
 
         self.replay_buffer = replay_buffer
@@ -41,11 +42,13 @@ class DQNAgent:
     def update(self):
         """
         Optimise the TD-error over a single minibatch of transitions
-        :return: the loss
+        @return {loss} the loss
         """
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(self.batch_size)
         states = np.array(states) / 255.0
         next_states = np.array(next_states) / 255.0
+        
+        # load the variable to device(CPU/GPU)
         states = torch.from_numpy(states).float().to(self.device)
         actions = torch.from_numpy(actions).long().to(self.device)
         rewards = torch.from_numpy(rewards).float().to(self.device)
