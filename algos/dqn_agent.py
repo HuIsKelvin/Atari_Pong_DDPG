@@ -2,7 +2,6 @@ from gym import spaces
 import numpy as np
 
 from utils.dqn_neurips_network import DQN
-# from dqn.replay_buffer import ReplayBuffer
 from utils.memory import ReplayBuffer
 import torch
 import torch.nn.functional as F
@@ -47,7 +46,7 @@ class DQNAgent:
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(self.batch_size)
         states = np.array(states) / 255.0
         next_states = np.array(next_states) / 255.0
-        
+
         # load the variable to device(CPU/GPU)
         states = torch.from_numpy(states).float().to(self.device)
         actions = torch.from_numpy(actions).long().to(self.device)
