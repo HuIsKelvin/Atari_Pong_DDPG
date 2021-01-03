@@ -23,15 +23,15 @@ def run(config):
     '''
     model_dir = Path('./dqn_models')
     if not model_dir.exists():
-        curr_run = 'run1'
+        curr_model = 'model1'
     else:
-        exst_run_nums = [int(str(folder.name).split('run')[1]) for folder in model_dir.iterdir()
-                         if str(folder.name).startswith('run')]
-        if len(exst_run_nums) == 0:
-            curr_run = 'run1'
+        exst_model_nums = [int(str(folder.name).split('model')[1]) for folder in model_dir.iterdir()
+                         if str(folder.name).startswith('model')]
+        if len(exst_model_nums) == 0:
+            curr_model = 'model1'
         else:
-            curr_run = 'run%i' % (max(exst_run_nums) + 1)
-    run_dir = model_dir / curr_run
+            curr_model = 'model%i' % (max(exst_model_nums) + 1)
+    run_dir = model_dir / curr_model
     figures_dir = run_dir / 'figures'
 
     os.makedirs(str(run_dir))
@@ -143,15 +143,19 @@ def run(config):
 
     # draw graph
     index = list(range(len(total_rewards)))
-    plt.plot(index, total_rewards)
+    plt.plot(index, total_rewards, color='orange')
+    plt.grid()
     plt.ylabel('Total Rewards')
+    plt.xlabel('Episodes')
     plt.savefig(str(figures_dir) + '/reward_curve.jpg')
     # plt.show()
     plt.close()
 
     index = list(range(len(mean_100ep_rewards)))
-    plt.plot(index, mean_100ep_rewards)
+    plt.plot(index, mean_100ep_rewards, color='orange')
+    plt.grid()
     plt.ylabel('mean_100ep_reward')
+    plt.xlabel('Episodes')
     plt.savefig(str(figures_dir) + '/mean_100ep_reward_curve.jpg')
     # plt.show()
     plt.close()
@@ -165,15 +169,16 @@ if __name__ == '__main__':
     parser.add_argument('--env', default='PongNoFrameskip-v4', type=str)
     parser.add_argument('--saved_model', default=None, type=str,
                         help='Load the model you have save before (for example: ./dqn_models/run1/model.pt)')
-    parser.add_argument('--seed', default=42, type=int)
+    parser.add_argument('--seed', default=50, type=int)
     parser.add_argument('--buffer_size', default=5000, type=int)
-    parser.add_argument('--learning_rate', default=1e-4, type=float)
+    parser.add_argument('--learning_rate', default=3e-4, type=float)
     parser.add_argument('--discounted_factor', default=0.99, type=float)
     parser.add_argument('--num_steps', default=int(1e6), type=int)
     parser.add_argument('--batch_size', default=32, type=int)
     parser.add_argument('--learning_start', default=10000, type=int, help='count with inner step')
     parser.add_argument('--target_update_freq', default=1000, type=int, help='count with inner step')
-    parser.add_argument('--print_freq', default=10, type=int, help='count with outer episode')
+    # parser.add_argument('--print_freq', default=10, type=int, help='count with outer episode')
+    parser.add_argument('--print_freq', default=1, type=int, help='count with outer episode')
     parser.add_argument('--save_model_freq', default=10, type=int, help='count with outer episode')
     parser.add_argument('--e_greedy_end', default=0.01, type=float, help='e-greedy end threshold')
     parser.add_argument('--e_greedy_fraction', default=0.1, type=float, help='fraction of num-steps')

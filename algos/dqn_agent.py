@@ -54,6 +54,7 @@ class DQNAgent:
         next_states = torch.from_numpy(next_states).float().to(self.device)
         dones = torch.from_numpy(dones).float().to(self.device)
 
+        # Q value of target network and policy network
         with torch.no_grad():
             next_q_values = self.target_network(next_states)
             max_next_q_values, _ = next_q_values.max(1)
