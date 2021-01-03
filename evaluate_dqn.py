@@ -6,9 +6,9 @@ import os
 from pathlib import Path
 import time
 import torch
-from utils.memory import ReplayBuffer
-from utils.env_wrappers import *
-from algos.dqn_agent import DQNAgent
+from dqn.memory import ReplayBuffer
+from dqn.env_wrappers import *
+from dqn.dqn_agent import DQNAgent
 
 
 def evaluate_model():

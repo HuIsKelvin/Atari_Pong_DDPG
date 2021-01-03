@@ -5,9 +5,9 @@ from pathlib import Path
 import torch
 import numpy as np
 import gym
-from utils.memory import ReplayBuffer
-from utils.env_wrappers import *
-from algos.dqn_agent import DQNAgent
+from dqn.memory import ReplayBuffer
+from dqn.env_wrappers import *
+from dqn.dqn_agent import DQNAgent
 import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')
@@ -141,7 +141,9 @@ def run(config):
     agent.save(str(run_dir / 'model.pt'))
     env.close()
 
-    # draw graph
+    """
+    draw graph
+    """
     index = list(range(len(total_rewards)))
     plt.plot(index, total_rewards, color='orange')
     plt.grid()

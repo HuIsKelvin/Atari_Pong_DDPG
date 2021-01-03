@@ -9,7 +9,8 @@ cv2.ocl.setUseOpenCL(False)
 
 class NoopResetEnv(gym.Wrapper):
     def __init__(self, env, noop_max=30):
-        """Sample initial states by taking random number of no-ops on reset.
+        """
+        Sample initial states by taking random number of no-ops on reset.
         No-op is assumed to be action 0.
         """
         gym.Wrapper.__init__(self, env)
@@ -19,7 +20,9 @@ class NoopResetEnv(gym.Wrapper):
         assert env.unwrapped.get_action_meanings()[0] == 'NOOP'
 
     def reset(self, **kwargs):
-        """ Do no-op action for a number of steps in [1, noop_max]."""
+        """
+        Do no-op action for a number of steps in [1, noop_max].
+        """
         self.env.reset(**kwargs)
         if self.override_num_noops is not None:
             noops = self.override_num_noops
@@ -39,7 +42,9 @@ class NoopResetEnv(gym.Wrapper):
 
 class FireResetEnv(gym.Wrapper):
     def __init__(self, env):
-        """Take action on reset for environments that are fixed until firing."""
+        """
+        Take action on reset for environments that are fixed until firing.
+        """
         gym.Wrapper.__init__(self, env)
         assert env.unwrapped.get_action_meanings()[1] == 'FIRE'
         assert len(env.unwrapped.get_action_meanings()) >= 3
@@ -60,7 +65,8 @@ class FireResetEnv(gym.Wrapper):
 
 class EpisodicLifeEnv(gym.Wrapper):
     def __init__(self, env):
-        """Make end-of-life == end-of-episode, but only reset on true game over.
+        """
+        Make end-of-life == end-of-episode, but only reset on true game over.
         Done by DeepMind for the DQN and co. since it helps value estimation.
         """
         gym.Wrapper.__init__(self, env)
@@ -82,7 +88,8 @@ class EpisodicLifeEnv(gym.Wrapper):
         return obs, reward, done, info
 
     def reset(self, **kwargs):
-        """Reset only when lives are exhausted.
+        """
+        Reset only when lives are exhausted.
         This way all states are still reachable even though lives are episodic,
         and the learner need not know about any of this behind-the-scenes.
         """
@@ -97,7 +104,9 @@ class EpisodicLifeEnv(gym.Wrapper):
 
 class MaxAndSkipEnv(gym.Wrapper):
     def __init__(self, env, skip=4):
-        """Return only every `skip`-th frame"""
+        """
+        Return only every `skip`-th frame
+        """
         gym.Wrapper.__init__(self, env)
         # most recent raw observations (for max pooling across time steps)
         self._obs_buffer = np.zeros((2,) + env.observation_space.shape, dtype=np.uint8)
@@ -107,7 +116,9 @@ class MaxAndSkipEnv(gym.Wrapper):
         return self.env.reset()
 
     def step(self, action):
-        """Repeat action, sum reward, and max over last observations."""
+        """
+        Repeat action, sum reward, and max over last observations.
+        """
         total_reward = 0.0
         done = None
         for i in range(self._skip):
@@ -132,13 +143,16 @@ class ClipRewardEnv(gym.RewardWrapper):
         gym.RewardWrapper.__init__(self, env)
 
     def reward(self, reward):
-        """Bin reward to {+1, 0, -1} by its sign."""
+        """
+        Bin reward to {+1, 0, -1} by its sign.
+        """
         return np.sign(reward)
 
 
 class WarpFrame(gym.ObservationWrapper):
     def __init__(self, env):
-        """Warp frames to 84x84 as done in the Nature paper and later work.
+        """
+        Warp frames to 84x84 as done in the Nature paper and later work.
         Expects inputs to be of shape height x width x num_channels
         """
         gym.ObservationWrapper.__init__(self, env)
@@ -155,7 +169,8 @@ class WarpFrame(gym.ObservationWrapper):
 
 class FrameStack(gym.Wrapper):
     def __init__(self, env, k):
-        """Stack k last frames.
+        """
+        Stack k last frames.
         Returns lazy array, which is much more memory efficient.
         Expects inputs to be of shape num_channels x height x width.
         """
@@ -186,16 +201,19 @@ class ScaledFloatFrame(gym.ObservationWrapper):
         gym.ObservationWrapper.__init__(self, env)
 
     def observation(self, observation):
-        # careful! This undoes the memory optimization, use
-        # with smaller replay buffers only.
+        """
+        careful! This undoes the memory optimization, use
+        with smaller replay buffers only.
+        """
         return np.array(observation).astype(np.float32) / 255.0
 
 
 class LazyFrames(object):
     def __init__(self, frames):
-        """This object ensures that common frames between the observations are only stored once.
-        It exists purely to optimize memory usage which can be huge for DQN's 1M frames replay
-        buffers."""
+        """
+        This object ensures that common frames between the observations are only stored once.
+        It exists purely to optimize memory usage which can be huge for DQN's 1M frames replay buffers.
+        """
         self._frames = frames
 
     def __array__(self, dtype=None):
@@ -212,7 +230,9 @@ class LazyFrames(object):
 
 
 class PyTorchFrame(gym.ObservationWrapper):
-    """Image shape to num_channels x height x width"""
+    """
+    Image shape to num_channels x height x width
+    """
 
     def __init__(self, env):
         super(PyTorchFrame, self).__init__(env)

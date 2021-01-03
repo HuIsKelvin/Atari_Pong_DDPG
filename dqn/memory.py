@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class ReplayBuffer:
     """
     Simple storage for transitions from an environment.

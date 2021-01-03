@@ -1,8 +1,8 @@
 from gym import spaces
 import numpy as np
 
-from utils.dqn_neurips_network import DQN
-from utils.memory import ReplayBuffer
+from dqn.dqn_neurips_network import DQN
+from dqn.memory import ReplayBuffer
 import torch
 import torch.nn.functional as F
 

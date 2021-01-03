@@ -1,0 +1,2 @@
+seed=50
+learning_rate=3e-4
