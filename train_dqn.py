@@ -21,7 +21,7 @@ def run(config):
     '''
     preparetion for saved directory
     '''
-    model_dir = Path('./dqn_models')
+    model_dir = Path('./models')
     if not model_dir.exists():
         curr_model = 'model1'
     else:
