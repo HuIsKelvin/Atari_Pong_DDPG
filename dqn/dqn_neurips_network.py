@@ -6,8 +6,8 @@ import torch.nn.functional as F
 # Class structure loosely inspired by https://towardsdatascience.com/beating-video-games-with-deep-q-networks-7f73320b9592
 class DQN(nn.Module):
     """
-    A basic implementation of a Deep Q-Network. The architecture is the same as that described in the
-    neurips DQN paper.
+    A basic implementation of a Deep Q-Network.
+    The architecture is the same as that described in the neurips DQN paper.
     """
 
     def __init__(self,
@@ -35,6 +35,8 @@ class DQN(nn.Module):
             nn.ReLU(),
             nn.Linear(in_features=256, out_features=action_space.n)
         )
+
+        print("action type: {}".format(action_space.n))
 
     def forward(self, x):
         conv_out = self.conv(x).view(x.size()[0], -1)
