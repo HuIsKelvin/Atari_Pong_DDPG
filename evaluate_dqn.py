@@ -76,8 +76,8 @@ def run(config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Evaluate Mode')
     parser.add_argument('--env', default='PongNoFrameskip-v4', type=str)
-    parser.add_argument('--saved_model', default='./dqn_models/model11/model.pt', type=str,
-                        help='Load the model you have saved before (for example: ./ddpg_models/model1/model.pt)')
+    parser.add_argument('--saved_model', default='./models/model11/model.pt', type=str,
+                        help='Load the model you have saved before (for example: ./models/model1/model.pt)')
     parser.add_argument('--seed', default=1, type=int)
     parser.add_argument('--buffer_size', default=5000, type=int)
     parser.add_argument('--num_episodes', default=10, type=int)

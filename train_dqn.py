@@ -173,7 +173,7 @@ if __name__ == '__main__':
                         help='Load the model you have save before (for example: ./dqn_models/run1/model.pt)')
     parser.add_argument('--seed', default=50, type=int)
     parser.add_argument('--buffer_size', default=5000, type=int)
-    parser.add_argument('--learning_rate', default=3e-4, type=float)
+    parser.add_argument('--learning_rate', default=1e-4, type=float)
     parser.add_argument('--discounted_factor', default=0.99, type=float)
     parser.add_argument('--num_steps', default=int(1e6), type=int)
     parser.add_argument('--batch_size', default=32, type=int)
